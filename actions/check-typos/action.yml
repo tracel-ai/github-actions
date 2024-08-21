@@ -1,0 +1,27 @@
+name: Check Typos
+description: Install typos from binary and check typos using tracel-xtask command (linux runners only)
+
+inputs:
+  install-link:
+    type: string
+    default: https://github.com/crate-ci/typos/releases/download
+    description: URL where to fetch typos archive
+    required: false
+  version:
+    type: string
+    default: 1.23.4
+    description: Version of typos to install
+    required: false
+
+runs:
+  using: composite
+  steps:
+    - name: Install typos
+      shell: bash
+      run: |
+        curl -L "${{ inputs.install-link }}/v${{ inputs.version }}/typos-v${{ inputs.version }}-x86_64-unknown-linux-musl.tar.gz" |
+        tar xz -C $HOME/.cargo/bin
+    - name: Typos
+      # This checks the typos for the whole repository
+      shell: bash
+      run: cargo xtask check typos
