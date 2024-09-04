@@ -14,6 +14,11 @@ inputs:
     type: string
     description: The build version fo the MESA graphic library to install
     required: true
+  cargo-package-to-clean:
+    type: string
+    default: ""
+    description: The build version fo the MESA graphic library to install
+    required: false
 
 runs:
   using: "composite"
@@ -26,7 +31,11 @@ runs:
         sudo rm -f /swapfile
         sudo apt clean
         df -h
-        cargo clean --package burn-tch
+    - name: Free cargo packages
+      if: inputs.cargo-package-to-clean != ''
+      shell: bash
+      run: |
+        cargo clean --package ${{ inputs.cargo-package-to-clean }}
     # --------------------------------------------------------------------------------
     - name: Install llvmpipe and lavapipe
       shell: bash
