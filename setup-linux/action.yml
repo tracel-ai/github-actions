@@ -38,14 +38,7 @@ runs:
         cargo clean --package ${{ inputs.cargo-package-to-clean }}
     # --------------------------------------------------------------------------------
     - name: Install llvmpipe and lavapipe
-      shell: bash
-      run: |
-        sudo apt-get update -y -qq
-        for i in {1..5}; do
-          sudo add-apt-repository ppa:kisak/kisak-mesa -y && break || sleep 5;
-        done
-        sudo apt-get update
-        sudo apt install -y libegl1-mesa libgl1-mesa-dri libxcb-xfixes0-dev mesa-vulkan-drivers
+      uses: tracel-ai/github-actions/setup-llvmpipe-lavapipe@v1
     # --------------------------------------------------------------------------------
     - name: Install Vulkan SDK
       # from wgpu repo: https://github.com/gfx-rs/wgpu/blob/trunk/.github/workflows/ci.yml
