@@ -36,6 +36,14 @@ runs:
       shell: bash
       run: |
         cargo clean --package ${{ inputs.cargo-package-to-clean }}
+    - name: Free unnecessary installed files on GH linux image
+      # see https://github.com/actions/runner-images/issues/2840#issuecomment-790492173
+      shell: bash
+      run: |
+        sudo rm -rf /usr/share/dotnet
+        sudo rm -rf /opt/ghc
+        sudo rm -rf "/usr/local/share/boost"
+        sudo rm -rf "$AGENT_TOOLSDIRECTORY"
     # --------------------------------------------------------------------------------
     - name: Install llvmpipe and lavapipe
       uses: tracel-ai/github-actions/setup-llvmpipe-lavapipe@v1
