@@ -10,6 +10,10 @@ inputs:
     type: string
     description: The cache name as defined in the CI workflow matrix
     required: true
+  linux-pre-cleanup:
+    type: bool
+    default: true
+    description: Cleanup some unnecessary files from linux runners (to be used only with GitHub linux runners)
 
 runs:
   using: composite
@@ -17,7 +21,7 @@ runs:
     - name: checkout
       uses: actions/checkout@v4
     - name: Free unnecessary installed files on GH linux image
-      if: runner.os == 'Linux'
+      if: runner.os == 'Linux' && inputs.linux-pre-cleanup == true
       # see https://github.com/actions/runner-images/issues/2840#issuecomment-790492173
       shell: bash
       run: |
