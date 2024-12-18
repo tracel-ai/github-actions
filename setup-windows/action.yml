@@ -10,7 +10,7 @@ inputs:
     type: string
     description: The version of DirectX Shader Compiler
     required: true
-  dxc-filenmae:
+  dxc-filename:
     type: string
     description: The filename of DirectX Shader Compiler archive
     required: true
