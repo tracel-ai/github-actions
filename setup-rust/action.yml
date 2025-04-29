@@ -14,6 +14,10 @@ inputs:
     type: bool
     default: true
     description: Cleanup some unnecessary files from linux runners (to be used only with GitHub linux runners)
+  enable-cache:
+    type: boolean
+    default: true
+    description: Whether to enable Rust dependency caching
 
 runs:
   using: composite
@@ -35,6 +39,7 @@ runs:
         components: rustfmt, clippy
         toolchain: ${{ inputs.rust-toolchain }}
     - name: caching
+      if: inputs.enable-cache == true
       uses: Swatinem/rust-cache@v2
       with:
         key: ${{ inputs.cache-key }}
