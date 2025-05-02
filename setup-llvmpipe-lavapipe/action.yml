@@ -7,8 +7,14 @@ runs:
       shell: bash
       run: |
         sudo apt-get update -y -qq
+        sudo apt-get install -y software-properties-common apt-transport-https ca-certificates
         for i in {1..5}; do
-          sudo add-apt-repository ppa:kisak/kisak-mesa -y && break || sleep 5;
+          sudo add-apt-repository ppa:kisak/kisak-mesa -y && break || {
+            echo "Attempt $i to add the PPA repository failed, retrying in 5 seconds..."
+            sleep 5
+          }
         done
         sudo apt-get update
         sudo apt install -y libegl1-mesa libgl1-mesa-dri libxcb-xfixes0-dev mesa-vulkan-drivers
+        # Verify installation
+        vulkaninfo --summary || echo "Vulkan installation verification failed"
