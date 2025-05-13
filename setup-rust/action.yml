@@ -16,13 +16,9 @@ inputs:
     description: Cleanup some unnecessary files from linux runners (to be used only with GitHub linux runners)
   enable-cache:
     type: bool
-    required: false
     default: true
     description: Whether to enable Rust dependency caching
-  self-hosted:
-    type: bool
-    default: false
-    description: Wether the runner is self-hosted or not
+    required: false
 
 runs:
   using: composite
@@ -31,7 +27,7 @@ runs:
       uses: actions/checkout@v4
     # --------------------------------------------------------------------------------
     - name: free unnecessary installed files on GH linux image
-      if: runner.os == 'Linux' && inputs.linux-pre-cleanup == true
+      # if: inputs.runner-os == 'Linux' && inputs.linux-pre-cleanup == true
       # see https://github.com/actions/runner-images/issues/2840#issuecomment-790492173
       shell: bash
       run: |
@@ -41,7 +37,7 @@ runs:
         sudo rm -rf "$AGENT_TOOLSDIRECTORY"
     # --------------------------------------------------------------------------------
     - name: install dependencies
-      if: runner.os == 'Linux' && inputs.self-hosted == true
+      # if: inputs.runner-os == 'Linux' && inputs.self-hosted == true
       shell: bash
       run: |
         sudo apt get install build-essentials
