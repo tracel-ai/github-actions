@@ -2,23 +2,19 @@ name: Checkout and setup rust with cache support
 description: Bootstrap action to checkout the code, install the rust toolchain and retrieve the Rust dependency cache if any.
 
 inputs:
-  rust-toolchain:
-    type: string
-    description: Rust toolchain to install
-    required: true
   cache-key:
     type: string
     description: The cache name as defined in the CI workflow matrix
     required: true
-  linux-pre-cleanup:
-    type: bool
-    default: true
-    description: Cleanup some unnecessary files from linux runners (to be used only with GitHub linux runners)
   enable-cache:
     type: bool
     default: true
     description: Whether to enable Rust dependency caching
     required: false
+  rust-toolchain:
+    type: string
+    description: Rust toolchain to install
+    required: true
 
 runs:
   using: composite
@@ -26,21 +22,22 @@ runs:
     - name: checkout
       uses: actions/checkout@v4
     # --------------------------------------------------------------------------------
-    - name: free unnecessary installed files on GH linux image
-      # if: inputs.runner-os == 'Linux' && inputs.linux-pre-cleanup == true
-      # see https://github.com/actions/runner-images/issues/2840#issuecomment-790492173
-      shell: bash
+    - name: free up space on GitHub runner
+      if: runner.os == 'Linux' && runner.environment == 'github-hosted'
       run: |
+        : Free up space on Linux Github runner image
         sudo rm -rf /usr/share/dotnet
         sudo rm -rf /opt/ghc
         sudo rm -rf "/usr/local/share/boost"
         sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+      shell: bash
     # --------------------------------------------------------------------------------
     - name: install dependencies
-      # if: inputs.runner-os == 'Linux' && inputs.self-hosted == true
-      shell: bash
+      if: runner.os == 'Linux' && runner.environment == 'self-hosted'
       run: |
-        sudo apt get install build-essentials
+        : Install dependencies
+        sudo apt-get install -y build-essential
+      shell: bash
     # --------------------------------------------------------------------------------
     - name: install rust
       uses: dtolnay/rust-toolchain@master
@@ -49,7 +46,7 @@ runs:
         toolchain: ${{ inputs.rust-toolchain }}
     # --------------------------------------------------------------------------------
     - name: caching
-      if: inputs.enable-cache == true || inputs.enable-cache == 'true'
+      if: inputs.enable-cache == 'true'
       uses: Swatinem/rust-cache@v2
       with:
         key: ${{ inputs.cache-key }}
