@@ -1,0 +1,12 @@
+# Create a CUDA image on GCP
+- Launch an instance with the latest official Ubuntu image
+- SSH
+- apt-get update
+- apt-get install build-essential
+- wget https://developer.download.nvidia.com/compute/cuda/12.9.0/local_installers/cuda_12.9.0_575.51.03_linux.run
+- sh cuda_12.9.0_575.51.03_linux.run (add flag to have output if exists)
+- shutdown now
+- create image:
+  - family: tracel-ubuntu-2404-amd64-nvidia
+  - name: tracel-ubuntu-2404-amd64-nvidia-cuda-xxx
+
