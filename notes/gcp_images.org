@@ -1,12 +1,20 @@
+If you read this, consider automating it :-)
+
 # Create a CUDA image on GCP
-- Launch an instance with the latest official Ubuntu image
-- SSH
-- apt-get update
-- apt-get install build-essential
-- wget https://developer.download.nvidia.com/compute/cuda/12.9.0/local_installers/cuda_12.9.0_575.51.03_linux.run
-- sh cuda_12.9.0_575.51.03_linux.run (add flag to have output if exists)
-- shutdown now
-- create image:
-  - family: tracel-ubuntu-2404-amd64-nvidia
-  - name: tracel-ubuntu-2404-amd64-nvidia-cuda-xxx
+- [ ] Launch an instance with the latest official Ubuntu image
+- [ ] SSH
+- [ ] apt-get update
+- [ ] apt-get install build-essential
+- [ ] wget https://developer.download.nvidia.com/compute/cuda/12.9.0/local_installers/cuda_12.9.0_575.51.03_linux.run
+- [ ] sh cuda_12.9.0_575.51.03_linux.run
+- [ ] shutdown -r now
+- [ ] verify: nvcc --info
+- [ ] wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo apt-key add -
+- [ ] sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-1.4.313-noble.list https://packages.lunarg.com/vulkan/1.4.313/lunarg-vulkan-1.4.313-noble.list
+- [ ] apt-get update
+- [ ] apt-get install vulkan-sdk
+- [ ] verify: vulkaninfo | grep GPU
+- [ ] create image:
+  - family: tracel-ci-ubuntu-2404-amd64-nvidia
+  - name: tracel-ci-ubuntu-2404-amd64-nvidia-cuda-129-vulkan-14313 (replace the cuda and vulkan versions accordingly)
 
