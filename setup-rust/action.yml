@@ -6,6 +6,10 @@ inputs:
     type: string
     description: The cache name as defined in the CI workflow matrix
     required: true
+  shared-key:
+    type: string
+    description: A shared key to use the cache across different jobs (overrides cache-key)
+    default: ""
   enable-cache:
     type: bool
     default: true
@@ -15,6 +19,11 @@ inputs:
     type: string
     description: Rust toolchain to install
     required: true
+
+outputs:
+  cache-hit:
+    description: "A boolean value that indicates an exact match was found."
+    value: ${{ steps.caching-step.outputs.cache-hit }}
 
 runs:
   using: composite
@@ -48,8 +57,10 @@ runs:
     - name: caching
       if: inputs.enable-cache == 'true'
       uses: Swatinem/rust-cache@v2
+      id: caching-step
       with:
         key: ${{ inputs.cache-key }}
+        shared-key: ${{ inputs.shared-key }}
         prefix-key: v11-rust
         cache-on-failure: false
         cache-all-crates: true
