@@ -14,7 +14,9 @@ If you read this, consider automating it :-)
 - [ ] apt-get update
 - [ ] apt-get install vulkan-sdk
 - [ ] verify: vulkaninfo | grep GPU
+- [ ] Install cuda-toolkit from Nvidia page: https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=Ubuntu&target_version=24.04&target_type=deb_network
+- [ ] Install the drivers from the same page
+- [ ] apt-get install jq
 - [ ] create image:
   - family: tracel-ci-ubuntu-2404-amd64-nvidia
-  - name: tracel-ci-ubuntu-2404-amd64-nvidia-cuda-129-vulkan-14313 (replace the cuda and vulkan versions accordingly)
-
+  - name: tracel-ci-ubuntu-2404-amd64-nvidia-cuda-129-vulkan-14313-# (replace the cuda and vulkan versions accordingly and the suffix number)
