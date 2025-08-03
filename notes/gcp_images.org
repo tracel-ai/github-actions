@@ -4,19 +4,10 @@ If you read this, consider automating it :-)
 - [ ] Launch an instance with the latest official Ubuntu image
 - [ ] SSH
 - [ ] apt-get update
-- [ ] apt-get install build-essential
-- [ ] wget https://developer.download.nvidia.com/compute/cuda/12.9.0/local_installers/cuda_12.9.0_575.51.03_linux.run
-- [ ] sh cuda_12.9.0_575.51.03_linux.run
-- [ ] shutdown -r now
-- [ ] verify: nvcc --info
-- [ ] wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo apt-key add -
-- [ ] sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-1.4.313-noble.list https://packages.lunarg.com/vulkan/1.4.313/lunarg-vulkan-1.4.313-noble.list
-- [ ] apt-get update
-- [ ] apt-get install vulkan-sdk
-- [ ] verify: vulkaninfo | grep GPU
+- [ ] apt-get install git
 - [ ] Install cuda-toolkit from Nvidia page: https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=Ubuntu&target_version=24.04&target_type=deb_network
 - [ ] Install the drivers from the same page
-- [ ] apt-get install jq
 - [ ] create image:
   - family: tracel-ci-ubuntu-2404-amd64-nvidia
   - name: tracel-ci-ubuntu-2404-amd64-nvidia-cuda-129-vulkan-14313-# (replace the cuda and vulkan versions accordingly and the suffix number)
+
