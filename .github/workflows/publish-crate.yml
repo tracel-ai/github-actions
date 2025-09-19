@@ -3,10 +3,10 @@ name: publish-crate
 on:
   workflow_call:
     inputs:
-      runner-name:
+      runs-on:
         required: false
         type: string
-        default: ubuntu-latest
+        default: '"ubuntu-latest"'
       crate:
         required: true
         type: string
@@ -20,7 +20,7 @@ on:
 
 jobs:
   publish-crate:
-    runs-on: ${{ inputs.runner-name }}
+    runs-on: ${{ fromJSON(inputs.runs-on) }}
     steps:
       - name: checkout
         uses: actions/checkout@v4
