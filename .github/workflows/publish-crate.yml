@@ -10,6 +10,10 @@ on:
       crate:
         required: true
         type: string
+      apt-packages:
+        required: false
+        type: string
+        default: ""
     secrets:
       CRATES_IO_API_TOKEN:
         required: true
@@ -23,6 +27,12 @@ jobs:
 
       - name: install rust
         uses: dtolnay/rust-toolchain@stable
+
+      - name: install apt packages
+        if: ${{ inputs.apt-packages != '' }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ${{ inputs.apt-packages }}
 
       - name: publish to crates.io
         run: cargo xtask publish ${{ inputs.crate }}
