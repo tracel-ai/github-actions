@@ -59,46 +59,23 @@ runs:
         sudo apt-get install -y ${{ inputs.apt-packages }}
     # --------------------------------------------------------------------------------
     - name: Install llvmpipe and lavapipe
-      uses: tracel-ai/github-actions/setup-llvmpipe-lavapipe@v1
+      uses: tracel-ai/github-actions/setup-llvmpipe-lavapipe@v4
     # --------------------------------------------------------------------------------
     - name: Install Vulkan SDK
-      # from wgpu repo: https://github.com/gfx-rs/wgpu/blob/trunk/.github/workflows/ci.yml
       shell: bash
       run: |
-        set -e
+        set -euo pipefail
 
         sudo apt-get update -y -qq
 
-        # vulkan sdk
-        wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo apt-key add -
-        sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-${{ inputs.vulkan-sdk-version }}-jammy.list https://packages.lunarg.com/vulkan/${{ inputs.vulkan-sdk-version }}/lunarg-vulkan-${{ inputs.vulkan-sdk-version }}-jammy.list
+        # Create a dedicated keyring for LunarG (apt-key is removed on 24.04)
+        sudo install -m 0755 -d /etc/apt/keyrings
+        curl -fsSL https://packages.lunarg.com/lunarg-signing-key-pub.asc \
+          | sudo gpg --dearmor -o /etc/apt/keyrings/lunarg.gpg
+        sudo chmod 0644 /etc/apt/keyrings/lunarg.gpg
 
-        sudo apt-get update
-        sudo apt install -y vulkan-sdk
-    # --------------------------------------------------------------------------------
-    - name: Install Mesa
-      # from wgpu repo: https://github.com/gfx-rs/wgpu/blob/trunk/.github/workflows/ci.yml
-      shell: bash
-      run: |
-        set -e
+        echo "deb [signed-by=/etc/apt/keyrings/lunarg.gpg] https://packages.lunarg.com/vulkan noble main" \
+          | sudo tee /etc/apt/sources.list.d/lunarg-vulkan-noble.list > /dev/null
 
-        curl -L --retry 5 https://github.com/gfx-rs/ci-build/releases/download/${{ inputs.mesa-ci-build-version}}/mesa-${{ inputs.mesa-version }}-linux-x86_64.tar.xz -o mesa.tar.xz
-        mkdir mesa
-        tar xpf mesa.tar.xz -C mesa
-
-        # The ICD provided by the mesa build is hardcoded to the build environment.
-        #
-        # We write out our own ICD file to point to the mesa vulkan
-        cat <<- EOF > icd.json
-        {
-          "ICD": {
-              "api_version": "1.1.255",
-              "library_path": "$PWD/mesa/lib/x86_64-linux-gnu/libvulkan_lvp.so"
-          },
-          "file_format_version": "1.0.0"
-        }
-        EOF
-
-        echo "VK_DRIVER_FILES=$PWD/icd.json" >> "$GITHUB_ENV"
-        echo "LD_LIBRARY_PATH=$PWD/mesa/lib/x86_64-linux-gnu/:$LD_LIBRARY_PATH" >> "$GITHUB_ENV"
-        echo "LIBGL_DRIVERS_PATH=$PWD/mesa/lib/x86_64-linux-gnu/dri" >> "$GITHUB_ENV"
+        sudo apt-get update -y -qq
+        sudo apt-get install -y vulkan-sdk
