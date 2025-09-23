@@ -7,6 +7,10 @@ If you read this, consider automating it :-)
 - [ ] apt-get install git
 - [ ] Install cuda-toolkit from Nvidia page: https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=Ubuntu&target_version=24.04&target_type=deb_network
 - [ ] Install the drivers from the same page
+- [ ] Create a symlink to make =nvcc= available on PATHl
+  #+begin_src shell
+sudo ln -sf /usr/local/cuda/bin/nvcc /usr/local/bin/nvcc
+  #+end_src
 - [ ] create image:
   - family: tracel-ci-ubuntu-2404-amd64-nvidia
   - name: tracel-ci-ubuntu-2404-amd64-nvidia-cuda-129-vulkan-14313-# (replace the cuda and vulkan versions accordingly and the suffix number)
