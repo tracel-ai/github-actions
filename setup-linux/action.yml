@@ -2,6 +2,10 @@ name: Setup Linux Runner
 description: Installs drivers and prepare the Linux runner
 
 inputs:
+  apt-packages:
+    required: false
+    type: string
+    default: ""
   cargo-package-to-clean:
     type: string
     default: ""
@@ -36,6 +40,7 @@ runs:
       shell: bash
       run: |
         cargo clean --package ${{ inputs.cargo-package-to-clean }}
+    # --------------------------------------------------------------------------------
     - name: Free unnecessary installed files on GH linux image
       if: runner.os == 'Linux' && runner.environment == 'github-hosted'
       # see https://github.com/actions/runner-images/issues/2840#issuecomment-790492173
@@ -45,6 +50,13 @@ runs:
         sudo rm -rf /opt/ghc
         sudo rm -rf "/usr/local/share/boost"
         sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+    # --------------------------------------------------------------------------------
+    - name: Install apt packages
+      if: ${{ inputs.apt-packages != '' }}
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y ${{ inputs.apt-packages }}
     # --------------------------------------------------------------------------------
     - name: Install llvmpipe and lavapipe
       uses: tracel-ai/github-actions/setup-llvmpipe-lavapipe@v1
