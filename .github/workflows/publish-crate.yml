@@ -14,7 +14,7 @@ on:
         required: false
         type: string
         default: ""
-      extra-docs:
+      copy-doc-assets:
         required: false
         type: string
         default: ""   # space-separated list of files to copy
@@ -39,9 +39,9 @@ jobs:
           sudo apt-get install -y ${{ inputs.apt-packages }}
 
       - name: copy extra docs
-        if: ${{ inputs.extra-docs != '' }}
+        if: ${{ inputs.copy-doc-assets != '' }}
         run: |
-          for file in ${{ inputs.extra-docs }}; do
+          for file in ${{ inputs.copy-doc-assets }}; do
             cp "$file" "crates/${{ inputs.crate }}/"
           done
 
