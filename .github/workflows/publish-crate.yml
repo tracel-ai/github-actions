@@ -14,6 +14,10 @@ on:
         required: false
         type: string
         default: ""
+      extra-docs:
+        required: false
+        type: string
+        default: ""   # space-separated list of files to copy
     secrets:
       CRATES_IO_API_TOKEN:
         required: true
@@ -33,6 +37,13 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y ${{ inputs.apt-packages }}
+
+      - name: copy extra docs
+        if: ${{ inputs.extra-docs != '' }}
+        run: |
+          for file in ${{ inputs.extra-docs }}; do
+            cp "$file" "crates/${{ inputs.crate }}/"
+          done
 
       - name: publish to crates.io
         run: cargo xtask publish ${{ inputs.crate }}
