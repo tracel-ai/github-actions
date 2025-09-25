@@ -14,6 +14,10 @@ on:
         required: false
         type: string
         default: ""
+      copy-doc-assets:
+        required: false
+        type: string
+        default: ""   # space-separated list of files to copy
     secrets:
       CRATES_IO_API_TOKEN:
         required: true
@@ -33,6 +37,13 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y ${{ inputs.apt-packages }}
+
+      - name: copy doc assets
+        if: ${{ inputs.copy-doc-assets != '' }}
+        run: |
+          for file in ${{ inputs.copy-doc-assets }}; do
+            cp "$file" "crates/${{ inputs.crate }}/"
+          done
 
       - name: publish to crates.io
         run: cargo xtask publish ${{ inputs.crate }}
