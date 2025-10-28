@@ -47,6 +47,9 @@ jobs:
         run: |
           for file in ${{ inputs.copy-doc-assets }}; do
             cp "$file" "crates/${{ inputs.crate }}/"
+            # Add to git per-checkout exclude
+            # This is a cargo publish fix instead of using --allow-dirty for the whole crate
+            echo "crates/${{ inputs.crate }}/$(basename "$file")" >> .git/info/exclude
           done
 
       - name: publish to crates.io
