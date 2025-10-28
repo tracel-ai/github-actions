@@ -1,0 +1,59 @@
+name: "Check Cargo.toml version matches tag"
+description: "Ensures that the tag version (e.g., v1.2.3) matches the version in Cargo.toml"
+inputs:
+  tag:
+    description: "Tag to compare against (e.g., v1.2.3). Defaults to github.ref_name if not provided."
+    required: false
+  cargo_toml_path:
+    description: "Path to the Cargo.toml to read (default: Cargo.toml)"
+    required: false
+    default: "Cargo.toml"
+
+outputs:
+  file_version:
+    description: "Version read from Cargo.toml"
+  tag_version:
+    description: "Version parsed from the tag"
+  matches:
+    description: "Whether versions match (true/false)"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Ensure repository is checked out
+      uses: actions/checkout@v4
+
+    - name: Compare Cargo.toml version with tag
+      id: check
+      shell: bash
+      env:
+        INPUT_TAG: ${{ inputs.tag }}
+        REF_NAME: ${{ github.ref_name }}
+        CARGO_TOML_PATH: ${{ inputs.cargo_toml_path }}
+      run: |
+        set -euo pipefail
+
+        TAG="${INPUT_TAG:-$REF_NAME}"
+        TAG_VERSION="${TAG#v}"
+        echo "🔖 Tag version: ${TAG_VERSION}"
+
+        if [ ! -f "${CARGO_TOML_PATH}" ]; then
+          echo "❌ Cargo.toml not found at ${CARGO_TOML_PATH}"
+          exit 1
+        fi
+
+        FILE_VERSION=$(grep -E '^\s*version\s*=' "${CARGO_TOML_PATH}" | head -n 1 | sed -E 's/.*"([0-9]+\.[0-9]+\.[0-9]+)".*/\1/')
+        echo "📦 Cargo.toml version: ${FILE_VERSION}"
+
+        if [ "${TAG_VERSION}" != "${FILE_VERSION}" ]; then
+          echo "❌ Tag version (${TAG_VERSION}) does not match Cargo.toml version (${FILE_VERSION})"
+          echo "file_version=${FILE_VERSION}" >> "$GITHUB_OUTPUT"
+          echo "tag_version=${TAG_VERSION}" >> "$GITHUB_OUTPUT"
+          echo "matches=false" >> "$GITHUB_OUTPUT"
+          exit 1
+        fi
+
+        echo "✅ Versions match!"
+        echo "file_version=${FILE_VERSION}" >> "$GITHUB_OUTPUT"
+        echo "tag_version=${TAG_VERSION}" >> "$GITHUB_OUTPUT"
+        echo "matches=true" >> "$GITHUB_OUTPUT"
