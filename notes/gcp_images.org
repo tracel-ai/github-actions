@@ -1,13 +1,13 @@
 If you read this, consider automating it :-)
 
-# Create a CUDA image on GCP
+* Create a CUDA image on GCP
 - [ ] Launch an instance with the latest official Ubuntu image
 - [ ] SSH
 - [ ] apt-get update
 - [ ] apt-get install git
 - [ ] Install cuda-toolkit from Nvidia page: https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&Distribution=Ubuntu&target_version=24.04&target_type=deb_network
 - [ ] Install the drivers from the same page
-- [ ] Create a symlink to make =nvcc= available on PATHl
+- [ ] Create a symlink to make =nvcc= available on PATH
   #+begin_src shell
 sudo ln -sf /usr/local/cuda/bin/nvcc /usr/local/bin/nvcc
   #+end_src
@@ -15,3 +15,32 @@ sudo ln -sf /usr/local/cuda/bin/nvcc /usr/local/bin/nvcc
   - family: tracel-ci-ubuntu-2404-amd64-nvidia
   - name: tracel-ci-ubuntu-2404-amd64-nvidia-cuda-129-vulkan-14313-# (replace the cuda and vulkan versions accordingly and the suffix number)
 
+
+* Create an image to use xtask container command
+- [ ] Launch an instance with the latest official Ubuntu image
+- [ ] SSH
+- [ ] Base tooling
+#+begin_src shell
+sudo apt-get update -y
+sudo apt-get install -y build-essential pkg-config libssl-dev git curl ca-certificates jq unzip
+#+end_src
+- [ ] Install Docker
+#+begin_src shell
+curl -fsSL https://get.docker.com | sudo sh
+sudo usermod -aG docker $USER
+sudo systemctl enable –now docker
+#+end_src
+- [ ] Install AWS CLI v2
+#+begin_src shell
+curl -fsSL "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o /tmp/awscliv2.zip
+unzip -q /tmp/awscliv2.zip -d /tmp
+sudo /tmp/aws/install
+aws –version
+#+end_src
+- [ ] Stop the instance before imaging
+#+begin_src shell
+sudo poweroff
+#+end_src
+- [ ] create image:
+  - family: tracel-ci-ubuntu-2404-docker
+  - name: tracel-ci-ubuntu-2404-docker-#
