@@ -22,6 +22,10 @@ on:
         required: false
         type: boolean
         default: false
+      tag-validation:
+        required: false
+        type: boolean
+        default: true
     secrets:
       CRATES_IO_API_TOKEN:
         required: true
@@ -53,6 +57,6 @@ jobs:
           done
 
       - name: publish to crates.io
-        run: cargo xtask publish --validate-tag-version --tag ${{ github.ref_name }} ${{ inputs.crate }} ${{ inputs.dry-run-only && '--dry-run-only' || '' }}
+        run: cargo xtask publish ${{ inputs.tag-validation && '--validate-tag-version' || '' }} --tag ${{ github.ref_name }} ${{ inputs.crate }} ${{ inputs.dry-run-only && '--dry-run-only' || '' }}
         env:
           CRATES_IO_API_TOKEN: ${{ secrets.CRATES_IO_API_TOKEN }}
