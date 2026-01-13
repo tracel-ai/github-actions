@@ -60,3 +60,4 @@ jobs:
         run: cargo xtask publish ${{ inputs.tag-validation && '--validate-tag-version' || '' }} --tag ${{ github.ref_name }} ${{ inputs.crate }} ${{ inputs.dry-run-only && '--dry-run-only' || '' }}
         env:
           CRATES_IO_API_TOKEN: ${{ secrets.CRATES_IO_API_TOKEN }}
+          CRATES_REGISTRY_TOKEN: ${{ secrets.CRATES_IO_API_TOKEN }}
