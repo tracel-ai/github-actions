@@ -66,6 +66,13 @@ runs:
         cache-on-failure: false
         cache-all-crates: true
     # --------------------------------------------------------------------------------
-    - name: install xtask
+    - name: install xtask (unix)
+      if: runner.os != 'Windows'
+      shell: bash
+      run: |
+        cargo install tracel-xtask-cli
+    - name: install xtask (windows)
+      if: runner.os == 'Windows'
+      shell: pwsh
       run: |
         cargo install tracel-xtask-cli
