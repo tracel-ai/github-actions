@@ -7,6 +7,11 @@ inputs:
     default: https://github.com/crate-ci/typos/releases/download
     description: URL where to fetch typos archive
     required: false
+  subrepo:
+    type: string
+    default: ""
+    description: Name of the sub-repository
+    required: false
   version:
     type: string
     default: 1.23.4
@@ -22,6 +27,5 @@ runs:
         curl -L "${{ inputs.install-link }}/v${{ inputs.version }}/typos-v${{ inputs.version }}-x86_64-unknown-linux-musl.tar.gz" |
         tar xz -C $HOME/.cargo/bin
     - name: Typos
-      # This checks the typos for the whole repository
       shell: bash
-      run: cargo xtask check typos
+      run: xtask ${{ inputs.subrepo }} check typos
