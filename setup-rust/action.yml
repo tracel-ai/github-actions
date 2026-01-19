@@ -65,3 +65,7 @@ runs:
         prefix-key: v11-rust
         cache-on-failure: false
         cache-all-crates: true
+    # --------------------------------------------------------------------------------
+    - name: install xtask
+      run: |
+        cargo install tracel-xtask-cli
