@@ -10,6 +10,14 @@ inputs:
     type: string
     description: A shared key to use the cache across different jobs (overrides cache-key)
     default: ""
+  workspaces:
+    description: |
+      The cargo workspaces and target directory configuration.
+      Entries are separated by newlines and have the form `$workspace -> $target`.
+      `$target` is relative to `$workspace` and defaults to `target` if omitted.
+    required: false
+    default: |
+      . -> target
   enable-cache:
     type: bool
     default: true
@@ -65,6 +73,7 @@ runs:
         prefix-key: v11-rust
         cache-on-failure: false
         cache-all-crates: true
+        workspaces: ${{ inputs.workspaces }}
     # --------------------------------------------------------------------------------
     - name: install xtask (unix)
       if: runner.os != 'Windows'
