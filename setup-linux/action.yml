@@ -63,19 +63,24 @@ runs:
     # --------------------------------------------------------------------------------
     - name: Install Vulkan SDK
       shell: bash
-      env:
-        VULKAN_SDK_VERSION: ${{ inputs.version }}
-        VULKAN_FULL_SDK_VERSION: ${{ inputs.full-version }}
       run: |
         set -e
 
+        echo "1"
         curl -L --retry 5 https://sdk.lunarg.com/sdk/download/${{ inputs.vulkan-sdk-version }}/linux/vulkansdk-linux-x86_64-${{ inputs.vulkan-sdk-version }}.tar.xz -o vulkan-sdk.tar.xz
+        echo "2"
         mkdir vulkan-sdk
+        echo "3"
         tar xpf vulkan-sdk.tar.xz -C vulkan-sdk
+        echo "4"
 
         mv ./vulkan-sdk/${{ inputs.vulkan-sdk-version }} $HOME/VulkanSDK
 
+        echo "5"
         echo "$HOME/VulkanSDK/x86_64/bin" >> "$GITHUB_PATH"
+        echo "6"
         echo "LD_LIBRARY_PATH=$HOME/VulkanSDK/x86_64/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" >> "$GITHUB_ENV"
+        echo "7"
         echo "VK_ADD_LAYER_PATH=$HOME/VulkanSDK/x86_64/share/vulkan/explicit_layer.d" >> "$GITHUB_ENV"
+        echo "8"
 
