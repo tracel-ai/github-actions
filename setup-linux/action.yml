@@ -22,7 +22,7 @@ inputs:
   vulkan-sdk-version:
     type: string
     description: The version of the Vulkan SDK to install
-    required: true
+    default: "1.4.328.1"
 
 runs:
   using: "composite"
@@ -63,19 +63,19 @@ runs:
     # --------------------------------------------------------------------------------
     - name: Install Vulkan SDK
       shell: bash
+      env:
+        VULKAN_SDK_VERSION: ${{ inputs.version }}
+        VULKAN_FULL_SDK_VERSION: ${{ inputs.full-version }}
       run: |
-        set -euo pipefail
+        set -e
 
-        sudo apt-get update -y -qq
+        curl -L --retry 5 https://sdk.lunarg.com/sdk/download/${{ inputs.vulkan-sdk-version }}/linux/vulkansdk-linux-x86_64-${{ inputs.vulkan-sdk-version }}.tar.xz -o vulkan-sdk.tar.xz
+        mkdir vulkan-sdk
+        tar xpf vulkan-sdk.tar.xz -C vulkan-sdk
 
-        # Create a dedicated keyring for LunarG (apt-key is removed on 24.04)
-        sudo install -m 0755 -d /etc/apt/keyrings
-        curl -fsSL https://packages.lunarg.com/lunarg-signing-key-pub.asc \
-          | sudo gpg --dearmor -o /etc/apt/keyrings/lunarg.gpg
-        sudo chmod 0644 /etc/apt/keyrings/lunarg.gpg
+        mv ./vulkan-sdk/${{ inputs.vulkan-sdk-version }} $HOME/VulkanSDK
 
-        echo "deb [signed-by=/etc/apt/keyrings/lunarg.gpg] https://packages.lunarg.com/vulkan noble main" \
-          | sudo tee /etc/apt/sources.list.d/lunarg-vulkan-noble.list > /dev/null
+        echo "$HOME/VulkanSDK/x86_64/bin" >> "$GITHUB_PATH"
+        echo "LD_LIBRARY_PATH=$HOME/VulkanSDK/x86_64/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" >> "$GITHUB_ENV"
+        echo "VK_ADD_LAYER_PATH=$HOME/VulkanSDK/x86_64/share/vulkan/explicit_layer.d" >> "$GITHUB_ENV"
 
-        sudo apt-get update -y -qq
-        sudo apt-get install -y vulkan-sdk
