@@ -20,9 +20,6 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: Ensure repository is checked out
-      uses: actions/checkout@v4
-
     - name: Compare Cargo.toml version with tag
       id: check
       shell: bash

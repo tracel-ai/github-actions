@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: tracel-ai/github-actions/check-version@v5
+      - uses: tracel-ai/github-actions/check-version@v8
         with:
           tag: ${{ github.ref_name }}
           cargo_toml_path: Cargo.toml
