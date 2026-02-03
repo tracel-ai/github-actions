@@ -1,5 +1,5 @@
-name: Checkout and setup rust with cache support
-description: Bootstrap action to checkout the code, install the rust toolchain and retrieve the Rust dependency cache if any.
+name: Install rust
+description: Install the rust toolchain with optional cache support
 
 inputs:
   apt-packages:
