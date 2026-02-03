@@ -36,9 +36,6 @@ outputs:
 runs:
   using: composite
   steps:
-    - name: checkout
-      uses: actions/checkout@v6
-    # --------------------------------------------------------------------------------
     - name: free up space on GitHub runner
       if: runner.os == 'Linux' && runner.environment == 'github-hosted'
       run: |
