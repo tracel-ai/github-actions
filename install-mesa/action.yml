@@ -2,6 +2,7 @@
 # https://github.com/gfx-rs/wgpu/blob/trunk/.github/actions/install-mesa/action.yml
 name: "Install Mesa"
 description: "Install Mesa"
+
 inputs:
   # Sourced from https://archive.mesa3d.org/. Bumping this requires
   # updating the mesa build in https://github.com/gfx-rs/ci-build and creating a new release.
@@ -10,6 +11,7 @@ inputs:
   # Corresponds to https://github.com/gfx-rs/ci-build/releases
   ci-binary-build:
     default: "build26"
+
 runs:
   using: "composite"
   steps:

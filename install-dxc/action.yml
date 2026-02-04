@@ -1,0 +1,27 @@
+name: "Install DXC"
+description: "Install DXC"
+
+inputs:
+  dxc-release:
+    type: string
+    description: The version of DirectX Shader Compiler
+    default: "v1.8.2505.1"
+  dxc-filename:
+    type: string
+    description: The filename of DirectX Shader Compiler archive
+    default: "dxc_2025_07_14.zip"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install DirectX
+      if: runner.os == 'Windows'
+      shell: bash
+      run: |
+        set -e
+
+        curl.exe -L --retry 5 https://github.com/microsoft/DirectXShaderCompiler/releases/download/${{ inputs.dxc-release }}/${{ inputs.dxc-filename }} -o dxc.zip
+        7z.exe e dxc.zip -odxc bin/x64/{dxc.exe,dxcompiler.dll,dxil.dll}
+
+        # We need to use cygpath to convert PWD to a windows path as we're using bash.
+        cygpath --windows "$PWD/dxc" >> "$GITHUB_PATH"

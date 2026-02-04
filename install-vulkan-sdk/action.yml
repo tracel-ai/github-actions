@@ -2,12 +2,14 @@
 # https://github.com/gfx-rs/wgpu/blob/trunk/.github/actions/install-mesa/action.yml
 name: "Install Vulkan SDK"
 description: "Install Vulkan SDK"
+
 inputs:
   # Sourced from https://vulkan.lunarg.com/sdk/home#linux
   version:
     default: "1.4.328"
   full-version:
     default: "1.4.328.1"
+
 runs:
   using: "composite"
   steps:

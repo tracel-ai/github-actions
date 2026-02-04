@@ -1,0 +1,27 @@
+name: "Install WARP"
+description: "Install WARP"
+inputs:
+  warp-version:
+    type: string
+    description: The version for WARP DirectX component
+    default: "1.0.16.1"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install WARP
+      if: runner.os == 'Windows'
+      shell: bash
+      run: |
+        set -e
+
+        # Make sure dxc is in path.
+        dxc --version
+
+        curl.exe -L --retry 5 https://www.nuget.org/api/v2/package/Microsoft.Direct3D.WARP/${{ inputs.warp-version }} -o warp.zip
+        7z.exe e warp.zip -owarp build/native/bin/x64/d3d10warp.dll
+
+        mkdir -p target/llvm-cov-target/debug/deps
+
+        cp -v warp/d3d10warp.dll target/llvm-cov-target/debug/
+        cp -v warp/d3d10warp.dll target/llvm-cov-target/debug/deps
