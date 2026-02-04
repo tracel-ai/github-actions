@@ -16,6 +16,7 @@ runs:
   using: "composite"
   steps:
     - name: Free disk space
+      if: runner.os == 'Linux'
       shell: bash
       run: |
         df -h
@@ -40,7 +41,7 @@ runs:
         sudo rm -rf "$AGENT_TOOLSDIRECTORY"
     # --------------------------------------------------------------------------------
     - name: Install apt packages
-      if: ${{ inputs.apt-packages != '' }}
+      if: runner.os == 'Linux' && ${{ inputs.apt-packages != '' }}
       shell: bash
       run: |
         sudo apt-get update
