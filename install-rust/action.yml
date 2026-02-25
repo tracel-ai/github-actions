@@ -32,6 +32,11 @@ inputs:
     type: string
     description: Rust toolchain to install
     default: stable
+  rust-additional-targets:
+    type: string
+    description: Comma-separated string of additional targets to install
+    required: false
+    default: ""
 
 outputs:
   cache-hit:
@@ -64,6 +69,7 @@ runs:
       with:
         components: rustfmt, clippy
         toolchain: ${{ inputs.rust-toolchain }}
+        targets: ${{ inputs.rust-additional-targets }}
     # --------------------------------------------------------------------------------
     - name: caching
       if: inputs.enable-cache == 'true'
