@@ -40,6 +40,9 @@ jobs:
       - name: install rust
         uses: dtolnay/rust-toolchain@stable
       # --------------------------------------------------------------------------------
+      - name: Instal xtask CLI
+        uses: tracel-ai/github-actions/install-xtask-cli@v11
+      # --------------------------------------------------------------------------------
       - name: install apt packages
         if: ${{ inputs.apt-packages != '' }}
         run: |

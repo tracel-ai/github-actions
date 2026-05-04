@@ -83,13 +83,5 @@ runs:
         cache-all-crates: true
         workspaces: ${{ inputs.workspaces }}
     # --------------------------------------------------------------------------------
-    - name: install xtask (unix)
-      if: runner.os != 'Windows'
-      shell: bash
-      run: |
-        cargo install tracel-xtask-cli
-    - name: install xtask (windows)
-      if: runner.os == 'Windows'
-      shell: pwsh
-      run: |
-        cargo install tracel-xtask-cli
+    - name: Instal xtask CLI
+      uses: tracel-ai/github-actions/install-xtask-cli@v11

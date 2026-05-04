@@ -1,0 +1,16 @@
+name: Install xtask CLI
+description: Installs the xtask CLI
+
+runs:
+  using: composite
+  steps:
+    - name: install xtask (unix)
+      if: runner.os != 'Windows'
+      shell: bash
+      run: |
+        cargo install tracel-xtask-cli
+    - name: install xtask (windows)
+      if: runner.os == 'Windows'
+      shell: pwsh
+      run: |
+        cargo install tracel-xtask-cli
