@@ -20,7 +20,9 @@ runs:
       run: |
         set -e
 
-        curl.exe -L --retry 5 https://github.com/microsoft/DirectXShaderCompiler/releases/download/${{ inputs.dxc-release }}/${{ inputs.dxc-filename }} -o dxc.zip
+        curl.exe -fL --retry 3 --retry-all-errors --retry-max-time 900 \
+                 --connect-timeout 20 --max-time 1800 --speed-limit 102400 --speed-time 30 \
+                 https://github.com/microsoft/DirectXShaderCompiler/releases/download/${{ inputs.dxc-release }}/${{ inputs.dxc-filename }} -o dxc.zip
         7z.exe e dxc.zip -odxc bin/x64/{dxc.exe,dxcompiler.dll,dxil.dll}
 
         # We need to use cygpath to convert PWD to a windows path as we're using bash.
