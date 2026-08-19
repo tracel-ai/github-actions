@@ -60,8 +60,9 @@ runs:
       if: runner.os == 'Linux' && inputs.apt-packages != ''
       run: |
         : Install dependencies
-        sudo apt-get update
-        sudo apt-get install -y ${{ inputs.apt-packages }}
+        retry() { for i in 1 2 3; do sudo timeout 300 "$@" && return 0; sleep 10; done; return 1; }
+        retry apt-get update
+        retry apt-get install -y ${{ inputs.apt-packages }}
       shell: bash
     # --------------------------------------------------------------------------------
     - name: install rust

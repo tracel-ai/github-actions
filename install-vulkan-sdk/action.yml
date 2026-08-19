@@ -22,7 +22,9 @@ runs:
       run: |
         set -e
 
-        curl -L --retry 5 https://sdk.lunarg.com/sdk/download/${{ env.VULKAN_FULL_SDK_VERSION }}/linux/vulkansdk-linux-x86_64-${{ env.VULKAN_FULL_SDK_VERSION }}.tar.xz -o vulkan-sdk.tar.xz
+        curl -fL --retry 3 --retry-all-errors --retry-max-time 900 \
+             --connect-timeout 20 --max-time 1800 --speed-limit 102400 --speed-time 30 \
+             https://sdk.lunarg.com/sdk/download/${{ env.VULKAN_FULL_SDK_VERSION }}/linux/vulkansdk-linux-x86_64-${{ env.VULKAN_FULL_SDK_VERSION }}.tar.xz -o vulkan-sdk.tar.xz
         mkdir vulkan-sdk
         tar xpf vulkan-sdk.tar.xz -C vulkan-sdk
 
@@ -41,7 +43,9 @@ runs:
       run: |
         set -e
 
-        curl.exe -L --retry 5 https://sdk.lunarg.com/sdk/download/${{ env.VULKAN_FULL_SDK_VERSION }}/windows/vulkansdk-windows-X64-${{ env.VULKAN_FULL_SDK_VERSION }}.exe -o vulkan-sdk-installer.exe
+        curl.exe -fL --retry 3 --retry-all-errors --retry-max-time 900 \
+                 --connect-timeout 20 --max-time 1800 --speed-limit 102400 --speed-time 30 \
+                 https://sdk.lunarg.com/sdk/download/${{ env.VULKAN_FULL_SDK_VERSION }}/windows/vulkansdk-windows-X64-${{ env.VULKAN_FULL_SDK_VERSION }}.exe -o vulkan-sdk-installer.exe
 
         ./vulkan-sdk-installer.exe --accept-licenses --default-answer --confirm-command install
 
@@ -56,7 +60,9 @@ runs:
       run: |
         set -e
 
-        curl -L --retry 5 https://sdk.lunarg.com/sdk/download/${{ env.VULKAN_FULL_SDK_VERSION }}/mac/vulkansdk-macos-${{ env.VULKAN_FULL_SDK_VERSION }}.zip -o vulkan-sdk.zip
+        curl -fL --retry 3 --retry-all-errors --retry-max-time 900 \
+             --connect-timeout 20 --max-time 1800 --speed-limit 102400 --speed-time 30 \
+             https://sdk.lunarg.com/sdk/download/${{ env.VULKAN_FULL_SDK_VERSION }}/mac/vulkansdk-macos-${{ env.VULKAN_FULL_SDK_VERSION }}.zip -o vulkan-sdk.zip
         unzip vulkan-sdk.zip -d vulkan-sdk
 
         ls -l vulkan-sdk

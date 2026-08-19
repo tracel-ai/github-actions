@@ -24,7 +24,9 @@ runs:
       run: |
         set -e
 
-        curl -L --retry 5 https://github.com/gfx-rs/ci-build/releases/download/$CI_BINARY_BUILD/mesa-$MESA_VERSION-linux-x86_64.tar.xz -o mesa.tar.xz
+        curl -fL --retry 3 --retry-all-errors --retry-max-time 900 \
+             --connect-timeout 20 --max-time 1800 --speed-limit 102400 --speed-time 30 \
+             https://github.com/gfx-rs/ci-build/releases/download/$CI_BINARY_BUILD/mesa-$MESA_VERSION-linux-x86_64.tar.xz -o mesa.tar.xz
         mkdir mesa
         tar xpf mesa.tar.xz -C mesa
 
@@ -54,7 +56,9 @@ runs:
       run: |
         set -e
 
-        curl.exe -L --retry 5 https://github.com/pal1000/mesa-dist-win/releases/download/$MESA_VERSION/mesa3d-$MESA_VERSION-release-msvc.7z -o mesa.7z
+        curl.exe -fL --retry 3 --retry-all-errors --retry-max-time 900 \
+                 --connect-timeout 20 --max-time 1800 --speed-limit 102400 --speed-time 30 \
+                 https://github.com/pal1000/mesa-dist-win/releases/download/$MESA_VERSION/mesa3d-$MESA_VERSION-release-msvc.7z -o mesa.7z
         7z.exe e mesa.7z -omesa x64/{opengl32.dll,libgallium_wgl.dll,libglapi.dll,vulkan_lvp.dll,lvp_icd.x86_64.json}
 
         cp -v mesa/* target/llvm-cov-target/debug/
