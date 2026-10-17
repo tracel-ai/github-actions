@@ -41,7 +41,7 @@ jobs:
         uses: dtolnay/rust-toolchain@stable
       # --------------------------------------------------------------------------------
       - name: Instal xtask CLI
-        uses: tracel-ai/github-actions/install-xtask-cli@v11
+        uses: tracel-ai/github-actions/install-xtask-cli@v12
       # --------------------------------------------------------------------------------
       - name: install apt packages
         if: ${{ inputs.apt-packages != '' }}
