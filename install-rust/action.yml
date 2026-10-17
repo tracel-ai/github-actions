@@ -79,10 +79,11 @@ runs:
       with:
         key: ${{ inputs.cache-key }}
         shared-key: ${{ inputs.shared-key }}
-        prefix-key: v11-rust
+        prefix-key: v12-rust
         cache-on-failure: false
         cache-all-crates: true
         workspaces: ${{ inputs.workspaces }}
+        cache-directories: ~/.cache/xtask/targets
     # --------------------------------------------------------------------------------
     - name: Instal xtask CLI
-      uses: tracel-ai/github-actions/install-xtask-cli@v11
+      uses: tracel-ai/github-actions/install-xtask-cli@v12
