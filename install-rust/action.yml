@@ -28,6 +28,11 @@ inputs:
     default: true
     description: Whether to enable Rust dependency caching
     required: false
+  save-if:
+    type: string
+    description: Whether rust-cache saves the cache (e.g. only on the default branch); restoring always happens
+    required: false
+    default: "true"
   rust-toolchain:
     type: string
     description: Rust toolchain to install
@@ -84,6 +89,7 @@ runs:
         cache-all-crates: true
         workspaces: ${{ inputs.workspaces }}
         cache-directories: ~/.cache/xtask/targets
+        save-if: ${{ inputs.save-if }}
     # --------------------------------------------------------------------------------
     - name: Instal xtask CLI
       uses: tracel-ai/github-actions/install-xtask-cli@v12
